@@ -5,4 +5,3 @@
 
 - I have initailly deployed the TaskManager contract with one Teacher but that can be changed later.
 
-# Educhain

@@ -1,6 +1,8 @@
 const { ethers } = require("hardhat");
 const { expect } = require("chai");
 
+const taskManagerJSON = require("..//artifacts/contracts/TaskManager.sol/TaskManager.json");
+
 describe("1. Educhain Contract Tests:", function () {
   let Educhain, educhain, owner, addr1;
   beforeEach(async function () {
@@ -176,12 +178,8 @@ describe("3. TaskManager Contract: ", async function () {
       teacherAdd.address
     );
 
-    const TaskManager = await ethers.getContractFactory("TaskManager");
-    taskManager = await TaskManager.deploy(
-      educhain.address,
-      TeacherContractAdd
-    );
-    await taskManager.deployed();
+    const TaskManager = await admin.getTaskManagerByAddress(teacherAdd.address);
+    taskManager = await ethers.getContractAt("TaskManager", TaskManager);
   });
 
   it("Test 1: Should deploy TaskManager Contract", async function () {

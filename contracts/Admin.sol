@@ -3,6 +3,7 @@ pragma solidity >=0.5.0 <0.9.0;
 import "./Student.sol";
 import "./Teacher.sol";
 import "./Educhain.sol";
+import "./TaskManager.sol";
 
 contract Admin {
     address public owner;
@@ -20,8 +21,10 @@ contract Admin {
 
     mapping(address => address) registeredStudentsmap;
     mapping(address => address) registeredTeachermap;
+    mapping(address => address) taskManagermap;
     address[] registeredStudents;
     address[] registeredTeacher;
+    address[] taskManagerList;
 
     function registerUser(
         address EthAddress,
@@ -47,6 +50,13 @@ contract Admin {
             );
             registeredTeachermap[EthAddress] = address(newTeacher);
             registeredTeacher.push(EthAddress);
+
+            TaskManager newTaskManager = new TaskManager(
+                address(educhain),
+                address(newTeacher)
+            );
+            taskManagermap[EthAddress] = address(newTaskManager);
+            taskManagerList.push(EthAddress);
         }
     }
 
@@ -90,5 +100,17 @@ contract Admin {
         uint256 index
     ) public view returns (address) {
         return getTeacherContractByAddress(registeredTeacher[index]);
+    }
+
+    function getTaskManagerByAddress(
+        address _taskManager
+    ) public view returns (address) {
+        return taskManagermap[_taskManager];
+    }
+
+    function getTaskManagerByIndex(
+        uint256 index
+    ) public view returns (address) {
+        return getTaskManagerByAddress(taskManagerList[index]);
     }
 }
